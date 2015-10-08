@@ -8,10 +8,16 @@ export default function routes($stateProvider) {
             controller: 'HomeController',
             controllerAs: 'home'
         })
-    .state('stylists', {
-      url: '/stylists',
-      template: require('./features/stylists/stylists.html'),
-      controller: 'StylistsController',
-      controllerAs: 'stylists'
-    })
+        .state('stylists', {
+            url: '/stylists',
+            template: require('./features/stylists/stylists.html'),
+            controller: 'StylistsController',
+            controllerAs: 'stylists'
+        })
+        .state('videos', {
+            url: '/videos',
+            template: require('./features/videos/videos.html'),
+            controller: 'VideosController',
+            controllerAs: 'videos'
+        })
 }
