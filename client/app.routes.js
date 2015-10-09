@@ -1,6 +1,10 @@
-routes.$inject = ['$stateProvider'];
+routes.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
 
-export default function routes($stateProvider) {
+export default function routes($stateProvider, $urlRouterProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
+    $urlRouterProvider
+        .otherwise('/');
+
     $stateProvider
         .state('home', {
             url: '/',
@@ -10,9 +14,13 @@ export default function routes($stateProvider) {
         })
         .state('stylists', {
             url: '/stylists',
-            template: require('./features/stylists/stylists.html'),
-            controller: 'StylistsController',
-            controllerAs: 'stylists'
+            views: {
+                main: {
+                    template: require('./features/stylists/stylists.html'),
+                    controller: 'StylistsController',
+                    controllerAs: 'stylists'
+                }
+            }
         })
         .state('videos', {
             url: '/videos',
