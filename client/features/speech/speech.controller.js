@@ -1,162 +1,87 @@
 export default class SpeechController {
-    constructor($scope) {
+    constructor($scope, $timeout) {
         this.test = 'Hello from SpeechController';
 
-        this.commands = {
-            'new item *val': (val) => {
-                this.todo = val;
-                console.log(val);
-                $scope.apply();
-            }
-        }
-
+        //this.commands = {
+        //    'new item *val': (val) => {
+        //        this.todo = val;
+        //        console.log(val);
+        //        $scope.apply();
+        //    }
+        //}
         //annyang.addCommands(this.command);
         //annyang.debug();
         //annyang.start();
 
+
+        let originalPlaceholder = "what's up?";
+        this.placeholder = originalPlaceholder;
+
         if (! ('webkitSpeechRecognition' in window) ) {
             console.log("no webkitSpeechRecognition");
-        };
+        } else {
+            let talkPromptPlaceholder = "start talking";
+            var patience = 6;
 
-        //this.talkMsg = 'start talking';
-        var patience = 6;
-
-        // setup recognition
+            // setup recognition
             this.finalTranscript = '';
             this.recognizing = false;
             var timeout;
-            //var oldPlaceholder = null;
             this.recognition = new webkitSpeechRecognition();
-        this.recognition.continuous = true;
+            this.recognition.continuous = true;
 
             function restartTimer(recognition) {
-                timeout = setTimeout(()=> {
+                timeout = $timeout(() => {
                     recognition.stop();
                 }, patience * 1000);
             }
 
-        this.recognition.onstart = () => {
-                //oldPlaceholder = inputEl.placeholder;
-                //inputEl.placeholder = talkMsg;
-
-            console.log("onstart");
-            this.recognizing = true;
-                //micBtn.classList.add('listening');
+            this.recognition.onstart = () => {
+                //console.log("onstart");
+                $scope.$apply(() => {
+                    this.placeholder = talkPromptPlaceholder;
+                    this.recognizing = true;
+                });
                 restartTimer(this.recognition);
             };
 
-        this.recognition.onend = () => {
-            console.log("onend");
-            this.recognizing = false;
-                clearTimeout(timeout);
-                //micBtn.classList.remove('listening');
-                //if (oldPlaceholder !== null) inputEl.placeholder = oldPlaceholder;
+            this.recognition.onend = () => {
+                //console.log("onend");
+                $timeout.cancel(timeout);
+                $scope.$apply(() => {
+                    this.placeholder = originalPlaceholder;
+                    this.recognizing = false;
+                });
             };
 
-        this.recognition.onresult = (event) => {
-            console.log("onresult", event);
-            clearTimeout(timeout);
+            this.recognition.onresult = (event) => {
+                //console.log("onresult", event);
+                $timeout.cancel(timeout);
                 for (var i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
                         this.finalTranscript += event.results[i][0].transcript;
                     }
                 }
-            //this.finalTranscript = capitalize(this.finalTranscript);
-            console.log("this.finalTranscript", this.finalTranscript);
-            //this.speechText = this.finalTranscript;
-
-            $scope.$apply(() => {
-                this.speechText = this.finalTranscript;
-            });
+                //console.log("this.finalTranscript", this.finalTranscript);
+                $scope.$apply(() => {
+                    this.speechText = this.finalTranscript;
+                });
                 restartTimer(this.recognition);
             };
+        }
     }
 
     startListening() {
-                if (this.recognizing) {
-                    this.recognition.stop();
-                    return;
-                }
-                this.speechText = this.finalTranscript = '';
-                this.recognition.start();
+        if (('webkitSpeechRecognition' in window)) {
+            if (this.recognizing) {
+                this.recognition.stop();
+                return;
             }
-
-
-        //
-        //function capitalize(str) {
-        //    return str.length ? str[0].toUpperCase() + str.slice(1) : str;
-        //}
-        //
-        //var speechInputWrappers = document.getElementsByClassName('si-wrapper');
-        //
-        //[].forEach.call(speechInputWrappers, function(speechInputWrapper) {
-        //    // find elements
-        //    var inputEl = speechInputWrapper.querySelector('.si-input');
-        //    var micBtn = speechInputWrapper.querySelector('.si-btn');
-        //
-        //    // size and position them
-        //    var inputHeight = inputEl.offsetHeight;
-        //    var inputRightBorder = parseInt(getComputedStyle(inputEl).borderRightWidth, 10);
-        //    var buttonSize = 0.8 * inputHeight;
-        //    micBtn.style.top = 0.1 * inputHeight + 'px';
-        //    micBtn.style.height = micBtn.style.width = buttonSize + 'px';
-        //    inputEl.style.paddingRight = buttonSize - inputRightBorder + 'px';
-        //    speechInputWrapper.appendChild(micBtn);
-        //
-        //    // setup recognition
-        //    var finalTranscript = '';
-        //    var recognizing = false;
-        //    var timeout;
-        //    var oldPlaceholder = null;
-        //    var recognition = new webkitSpeechRecognition();
-        //    recognition.continuous = true;
-        //
-        //    function restartTimer() {
-        //        timeout = setTimeout(function() {
-        //            recognition.stop();
-        //        }, patience * 1000);
-        //    }
-        //
-        //    recognition.onstart = function() {
-        //        oldPlaceholder = inputEl.placeholder;
-        //        inputEl.placeholder = talkMsg;
-        //        recognizing = true;
-        //        micBtn.classList.add('listening');
-        //        restartTimer();
-        //    };
-        //
-        //    recognition.onend = function() {
-        //        recognizing = false;
-        //        clearTimeout(timeout);
-        //        micBtn.classList.remove('listening');
-        //        if (oldPlaceholder !== null) inputEl.placeholder = oldPlaceholder;
-        //    };
-        //
-        //    recognition.onresult = function(event) {
-        //        clearTimeout(timeout);
-        //        for (var i = event.resultIndex; i < event.results.length; ++i) {
-        //            if (event.results[i].isFinal) {
-        //                finalTranscript += event.results[i][0].transcript;
-        //            }
-        //        }
-        //        finalTranscript = capitalize(finalTranscript);
-        //        inputEl.value = finalTranscript;
-        //        restartTimer();
-        //    };
-        //
-        //    micBtn.addEventListener('click', function(event) {
-        //        event.preventDefault();
-        //        if (recognizing) {
-        //            recognition.stop();
-        //            return;
-        //        }
-        //        inputEl.value = finalTranscript = '';
-        //        recognition.start();
-        //    }, false);
-        //});
-
-
+            this.speechText = this.finalTranscript = '';
+            this.recognition.start();
+        }
+    }
 
 }
 
-SpeechController.$inject = ['$scope'];
+SpeechController.$inject = ['$scope', '$timeout'];

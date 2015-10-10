@@ -3,17 +3,13 @@
     {{speech.test}}
 
     <div>
-        <input type="text" placeholder="What's up?" ng-model="speech.speechText">
-        <button ng-click="speech.startListening()">speak</button>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" ng-model="speech.speechText" placeholder="{{speech.placeholder}}"/>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+                ng-click="speech.startListening()" ng-disabled="speech.recognizing">
+            <i class="material-icons">mic</i>
+        </button>
     </div>
-
-    <!--<div class="si-wrapper">-->
-        <!--<input type="text" class="si-input" placeholder="What's up?">-->
-        <!--<button class="si-btn">-->
-            <!--speech input-->
-            <!--<span class="si-mic"></span>-->
-            <!--<span class="si-holder"></span>-->
-        <!--</button>-->
-    <!--</div>-->
 
 </div>
