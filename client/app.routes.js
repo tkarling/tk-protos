@@ -6,22 +6,22 @@ export default function routes($stateProvider, $urlRouterProvider, $locationProv
         .otherwise('/');
 
     $stateProvider
-        .state('home', {
-            url: '/',
-            template: require('./features/home/home.html'),
-            controller: 'HomeController',
-            controllerAs: 'home'
-        })
-        .state('stylists', {
-            url: '/stylists',
-            views: {
-                main: {
-                    template: require('./features/stylists/stylists.html'),
-                    controller: 'StylistsController',
-                    controllerAs: 'stylists'
-                }
-            }
-        })
+        //.state('home', {
+        //    url: '/',
+        //    template: require('./features/home/home.html'),
+        //    controller: 'HomeController',
+        //    controllerAs: 'home'
+        //})
+        //.state('stylists', {
+        //    url: '/stylists',
+        //    views: {
+        //        main: {
+        //            template: require('./features/stylists/stylists.html'),
+        //            controller: 'StylistsController',
+        //            controllerAs: 'stylists'
+        //        }
+        //    }
+        //})
         .state('videos', {
             url: '/videos',
             template: require('./features/videos/videos.html'),
@@ -29,7 +29,7 @@ export default function routes($stateProvider, $urlRouterProvider, $locationProv
             controllerAs: 'videos'
         })
         .state('speech', {
-            url: '/speech',
+            url: '/',
             template: require('./features/speech/speech.html'),
             controller: 'SpeechController',
             controllerAs: 'speech'
