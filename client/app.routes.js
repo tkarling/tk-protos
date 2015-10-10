@@ -28,4 +28,10 @@ export default function routes($stateProvider, $urlRouterProvider, $locationProv
             controller: 'VideosController',
             controllerAs: 'videos'
         })
+        .state('speech', {
+            url: '/speech',
+            template: require('./features/speech/speech.html'),
+            controller: 'SpeechController',
+            controllerAs: 'speech'
+        })
 }
