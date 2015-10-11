@@ -2,24 +2,67 @@ export default class SpeechController {
     constructor($scope, $timeout) {
         this.test = 'Hello from SpeechController';
 
-        //this.commands = {
-        //    'new item *val': (val) => {
-        //        this.todo = val;
-        //        console.log(val);
-        //        $scope.apply();
-        //    }
-        //}
-        //annyang.addCommands(this.command);
-        //annyang.debug();
-        //annyang.start();
+        //console.log("annyang", annyang);
+        this.language = 'en-US';
+        this.debug = false;
+        if(annyang) {
+            this.commands = {
+                'add *val': (val) => {
+                    this.addedText = val;
+                    console.log("add command", val);
+                    $scope.$apply();
+                },
+                'check number *val': (val) => {
+                    this.checkNum = val;
+                    console.log("check command", val);
+                    $scope.$apply();
+                },
+                'remove number *val': (val) => {
+                    this.removeNum = val;
+                    console.log("remove command", val);
+                    $scope.$apply();
+                },
+                'delete number *val': (val) => {
+                    this.deleteNum = val;
+                    console.log("delete command", val);
+                    $scope.$apply();
+                },
+                'lisää *val': (val) => {
+                    this.addedText = val;
+                    console.log("add command", val);
+                    $scope.$apply();
+                },
+                'tsekkaa numero *val': (val) => {
+                    this.checkNum = val;
+                    console.log("check command", val);
+                    $scope.$apply();
+                },
+                'poista numero *val': (val) => {
+                    this.removeNum = val;
+                    console.log("remove command", val);
+                    $scope.$apply();
+                },
+                'tuhoa numero *val': (val) => {
+                    this.deleteNum = val;
+                    console.log("delete command", val);
+                    $scope.$apply();
+                }
 
+
+            }
+            annyang.addCommands(this.commands);
+            //annyang.debug();
+            //annyang.setLanguage('fi');
+            //annyang.start();
+        }
 
         let originalPlaceholder = "what's up?";
         this.placeholder = originalPlaceholder;
 
         if (! ('webkitSpeechRecognition' in window) ) {
             console.log("no webkitSpeechRecognition");
-        } else {
+        } else
+        {
             let talkPromptPlaceholder = "start talking";
             var patience = 6;
 
@@ -81,6 +124,46 @@ export default class SpeechController {
             this.recognition.start();
         }
     }
+
+    annyangStart() {
+        if(annyang) {
+            annyang.start();
+        }
+    }
+
+    annyangStop() {
+        if(annyang) {
+            annyang.abort();
+        }
+    }
+
+    annyangPause() {
+        if (annyang) {
+            annyang.pause();
+        }
+    }
+
+    annyangResume() {
+        if (annyang) {
+            annyang.resume();
+        }
+    }
+
+    annyangSetLanguage() {
+        if (annyang) {
+            this.language = this.language || 'en-US';
+
+            annyang.setLanguage(this.language);
+        }
+    }
+
+    annyangToggleDebug(myDebug) {
+        if (annyang) {
+            console.log("setting debug", myDebug);
+            annyang.debug(myDebug);
+        }
+    }
+
 
 }
 

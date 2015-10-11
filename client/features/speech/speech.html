@@ -1,7 +1,8 @@
 <div class="speech">
-    <h1>Hello from speech</h1>
-    {{speech.test}}
+    <h1>Speech Demos</h1>
+    <!--{{speech.test}}-->
 
+    <h3>webkitSpeechRecognition</h3>
     <div>
         <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" type="text" ng-model="speech.speechText" placeholder="{{speech.placeholder}}"/>
@@ -11,5 +12,51 @@
             <i class="material-icons">mic</i>
         </button>
     </div>
+
+    <h3>Annyang</h3>
+    <p>
+    <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" ng-model="speech.language" placeholder="set language"/>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+            ng-click="speech.annyangSetLanguage()">Set
+    </button>
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+        <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input"
+               ng-model="speech.debug" ng-change="speech.annyangToggleDebug(speech.debug)" />
+        <span class="mdl-checkbox__label">Debug mode</span>
+    </label>
+    </p>
+
+    <p>
+        <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;icon mdl-button&#45;&#45;colored"-->
+                <!--ng-click="speech.annyangStart()">-->
+            <!--<i class="material-icons">mic</i>-->
+        <!--</button>-->
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                ng-click="speech.annyangStart()">Start
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                ng-click="speech.annyangStop()">Stop
+        </button>
+        <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-button&#45;&#45;colored"-->
+                <!--ng-click="speech.annyangPause()">Pause-->
+        <!--</button>-->
+        <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-button&#45;&#45;colored"-->
+                <!--ng-click="speech.annyangResume()">Resume-->
+        <!--</button>-->
+    </p>
+
+    <ul>
+        <li>Added: <span class="target-value">{{speech.addedText}}</span></li>
+        <li>Checked no: <span class="target-value">{{speech.checkNum}}</span></li>
+        <li>Remove no: <span class="target-value">{{speech.removeNum}}</span></li>
+        <li>Delete no: <span class="target-value">{{speech.deleteNum}}</span></li>
+    </ul>
+    <p> In English: add, check number, remove number, delete number</p>
+    <p> Suomeksi: lisää, tsekkaa numero, poista numero, tuhoa numero</p>
+
+
 
 </div>
