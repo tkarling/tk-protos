@@ -14,8 +14,9 @@ describe('Controller: Reactive', function() {
     it('test is initialized to Hello from ReactiveController', function() {
         let ctrl = $controller('ReactiveController', {
             $scope: $scope,
-            uTest: true,
-            observeOnScope: () => ""
+            observeOnScope: () => "",
+            rx: () => "",
+            uTest: true
         });
         expect(ctrl.test).toBe('Hello from ReactiveController');
     });
