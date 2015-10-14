@@ -1,59 +1,14 @@
 export default class SpeechController {
-    constructor($scope, $timeout) {
+    constructor($scope, $timeout, uTest) {
         this.test = 'Hello from SpeechController';
+        this.$scope = $scope;
 
         //console.log("annyang", annyang);
         this.language = 'en-US';
         this.debug = false;
-        if(annyang) {
-            this.commands = {
-                'add *val': (val) => {
-                    this.addedText = val;
-                    console.log("add command", val);
-                    $scope.$apply();
-                },
-                'check number *val': (val) => {
-                    this.checkNum = val;
-                    console.log("check command", val);
-                    $scope.$apply();
-                },
-                'remove number *val': (val) => {
-                    this.removeNum = val;
-                    console.log("remove command", val);
-                    $scope.$apply();
-                },
-                'delete number *val': (val) => {
-                    this.deleteNum = val;
-                    console.log("delete command", val);
-                    $scope.$apply();
-                },
-                'lisää *val': (val) => {
-                    this.addedText = val;
-                    console.log("add command", val);
-                    $scope.$apply();
-                },
-                'tsekkaa numero *val': (val) => {
-                    this.checkNum = val;
-                    console.log("check command", val);
-                    $scope.$apply();
-                },
-                'poista numero *val': (val) => {
-                    this.removeNum = val;
-                    console.log("remove command", val);
-                    $scope.$apply();
-                },
-                'tuhoa numero *val': (val) => {
-                    this.deleteNum = val;
-                    console.log("delete command", val);
-                    $scope.$apply();
-                }
 
-
-            }
-            annyang.addCommands(this.commands);
-            //annyang.debug();
-            //annyang.setLanguage('fi');
-            //annyang.start();
+        if (!uTest) {
+            this.annyangSetup();
         }
 
         let originalPlaceholder = "what's up?";
@@ -114,6 +69,59 @@ export default class SpeechController {
         }
     }
 
+    annyangSetup () {
+        if (annyang) {
+            this.commands = {
+                'add *val': (val) => {
+                    this.addedText = val;
+                    console.log("add command", val);
+                    this.$scope.$apply();
+                },
+                'check number *val': (val) => {
+                    this.checkNum = val;
+                    console.log("check command", val);
+                    this.$scope.$apply();
+                },
+                'remove number *val': (val) => {
+                    this.removeNum = val;
+                    console.log("remove command", val);
+                    this.$scope.$apply();
+                },
+                'delete number *val': (val) => {
+                    this.deleteNum = val;
+                    console.log("delete command", val);
+                    this.$scope.$apply();
+                },
+                'lisää *val': (val) => {
+                    this.addedText = val;
+                    console.log("add command", val);
+                    this.$scope.$apply();
+                },
+                'tsekkaa numero *val': (val) => {
+                    this.checkNum = val;
+                    console.log("check command", val);
+                    this.$scope.$apply();
+                },
+                'poista numero *val': (val) => {
+                    this.removeNum = val;
+                    console.log("remove command", val);
+                    this.$scope.$apply();
+                },
+                'tuhoa numero *val': (val) => {
+                    this.deleteNum = val;
+                    console.log("delete command", val);
+                    this.$scope.$apply();
+                }
+
+
+            }
+            annyang.addCommands(this.commands);
+            //annyang.debug();
+            //annyang.setLanguage('fi');
+            //annyang.start();
+        }
+    }
+
     startListening() {
         if (('webkitSpeechRecognition' in window)) {
             if (this.recognizing) {
@@ -167,4 +175,4 @@ export default class SpeechController {
 
 }
 
-SpeechController.$inject = ['$scope', '$timeout'];
+SpeechController.$inject = ['$scope', '$timeout', 'uTest'];

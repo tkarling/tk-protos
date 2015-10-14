@@ -13,7 +13,8 @@ describe('Controller: Speech', function() {
 
     it('test is initialized to Hello from SpeechController', function() {
         let ctrl = $controller('SpeechController',{
-            $scope: $scope
+            $scope: $scope,
+            uTest: true
         });
         expect(ctrl.test).toBe('Hello from SpeechController');
     });

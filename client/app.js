@@ -9,4 +9,5 @@ import speech from './features/speech';
 import videos from './features/videos';
 
 angular.module('app', [uirouter, home, stylists, videos, speech])
-  .config(routes);
+    .value("uTest", false)
+    .config(routes);
