@@ -2,7 +2,7 @@ export default class ReactiveController {
     constructor($scope, observeOnScope, uTest, reactiveService) {
         this.test = 'Hello from ReactiveController';
 
-        if(uTest) {
+        if (uTest) {
             return;
         }
 
@@ -17,25 +17,24 @@ export default class ReactiveController {
             $scope.name = this.name;
         });
         var searchResults = observeOnScope($scope, 'name').
+            sample(1000).
             map((change) => {
-                //console.log("before", change);
+                //console.log("after", change);
                 return this.name;
             }).
-            //throttle(1000).   // does this skip last input??
-            //map((search) => {
-            //    console.log("after", search);
-            //    return search;
-            //}).
             distinctUntilChanged().
             concatMap(search => {
                 //console.log("search", search, this.name);
                 return reactiveService.searchWikipedia(this.name);
             });
 
-        searchResults.forEach(result => {
-            //console.log("result", result);
-            this.results = result;
-        });
+        searchResults.
+            safeApply($scope, result => {
+                this.results = result;
+            }).
+            forEach(result => {
+                //console.log("result", result);
+            });
     }
 
 }
