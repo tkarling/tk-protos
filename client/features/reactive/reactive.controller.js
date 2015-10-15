@@ -27,18 +27,13 @@ export default class ReactiveController {
         //    $scope.$apply();
         //});
 
-        this.$watch = $scope.$watch.bind($scope);
-        this.$watch(() => {
+        $scope.$watch(() => {
             return this.name
         }, () => {
             $scope.name = this.name;
         });
-
-        var searchResults = observeOnScope(this, 'name').
+        var searchResults = observeOnScope($scope, 'name').
             concatMap(change => {
-                this.observedChange = change;
-                this.newValue = change.newValue;
-                this.oldValue = change.oldValue;
                 console.log("change", change);
                 return searchWikipedia(change.newValue);
             });
@@ -46,12 +41,7 @@ export default class ReactiveController {
         searchResults.forEach(result => {
             console.log("result", result);
             this.results = result;
-            //$scope.$apply();
         });
-
-        //keypresses.forEach(change => {
-        //});
-
 
     }
 }

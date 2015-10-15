@@ -4,14 +4,8 @@
     <br><br>
 
     <h2>Reactive Angular</h2>
-    <ul>
-        <li>observedChange {{reactive.observedChange}}</li>
-        <li>newValue: {{reactive.newValue}}</li>
-        <li>oldValue: {{reactive.oldValue}}</li>
-    </ul>
 
     <input type="text" ng-model="reactive.name" />
-
     <ul>
         <li ng-repeat="result in reactive.results">{{result}}</li>
     </ul>
