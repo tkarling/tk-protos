@@ -13,12 +13,23 @@ export default class ReactiveController {
         $scope.$watch(() => {
             return this.name
         }, () => {
+            //console.log("this.name", this.name);
             $scope.name = this.name;
         });
         var searchResults = observeOnScope($scope, 'name').
-            concatMap(change => {
-                //console.log("change", change);
-                return reactiveService.searchWikipedia(change.newValue);
+            map((change) => {
+                //console.log("before", change);
+                return this.name;
+            }).
+            //throttle(1000).   // does this skip last input??
+            //map((search) => {
+            //    console.log("after", search);
+            //    return search;
+            //}).
+            distinctUntilChanged().
+            concatMap(search => {
+                //console.log("search", search, this.name);
+                return reactiveService.searchWikipedia(this.name);
             });
 
         searchResults.forEach(result => {
