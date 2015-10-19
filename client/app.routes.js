@@ -23,7 +23,7 @@ export default function routes($stateProvider, $urlRouterProvider, $locationProv
         //    }
         //})
         .state('videos', {
-            url: '/videos',
+            url: '/',
             template: require('./features/videos/videos.html'),
             controller: 'VideosController',
             controllerAs: 'videos'
@@ -35,7 +35,7 @@ export default function routes($stateProvider, $urlRouterProvider, $locationProv
             controllerAs: 'speech'
         })
         .state('reactive', {
-            url: '/',
+            url: '/reactive',
             template: require('./features/reactive/reactive.html'),
             controller: 'ReactiveController',
             controllerAs: 'reactive'

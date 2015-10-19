@@ -2,20 +2,24 @@
     <h1>Video Demo</h1>
     <!--{{videos.test}}-->
 
-    <video width="400" controls>
-        <source src="../../videos/SampleVideo_720x480_1mb.mp4" type="video/mp4">
-        <!--<source src="mov_bbb.ogg" type="video/ogg">-->
-        Your browser does not support HTML5 video.
-    </video>
+    <h4>Video Tag<button ng-click="videos.showTagged = ! videos.showTagged;">Show Videos</button></button></h4>
 
-    <video width="400" controls>
-        <source src="../../videos/SampleVideo_720x480_1mb.mp4" type="video/mp4">
-        <!--<source src="mov_bbb.ogg" type="video/ogg">-->
-        Your browser does not support HTML5 video.
-    </video>
+    <div ng-if="videos.showTagged">
+        <video width="400" controls>
+            <source src="../../videos/SampleVideo_720x480_1mb.mp4" type="video/mp4">
+            <!--<source src="mov_bbb.ogg" type="video/ogg">-->
+            Your browser does not support HTML5 video.
+        </video>
 
-    <p>
-        Video courtesy of
-        <a href="http://www.bigbuckbunny.org/" target="_blank">Big Buck Bunny</a>.
-    </p>
+        <video width="400" controls>
+            <source src="../../videos/SampleVideo_720x480_1mb.mp4" type="video/mp4">
+            <!--<source src="mov_bbb.ogg" type="video/ogg">-->
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+
+    <h4>YouTube</h4>
+
+    <youtube code="videos.code"></youtube>
+
 </div>
