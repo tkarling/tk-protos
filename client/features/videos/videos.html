@@ -20,6 +20,37 @@
 
     <h4>YouTube</h4>
 
-    <youtube code="videos.code"></youtube>
+    <div>
+        <div  ng-style="videos.myStyle">
+         <youtube width="{{videos.yt.width}}" height="{{videos.yt.height}}" videoid="{{videos.yt.videoid}}"></youtube>
+        </div>
+
+        <br />
+        Width:<input type="text" ng-model="videos.yt.width" ng-change="videos.updateWidth()">
+        Height:<input type="text" ng-model="videos.yt.height">
+
+        <button id="demo-menu-lower-left"
+                class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+        </button>
+
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+            for="demo-menu-lower-left">
+            <li class="mdl-menu__item" ng-click="videos.setVideoId('dNmu5NZG7sk')">Atte</li>
+            <li class="mdl-menu__item" ng-click="videos.setVideoId('oHg5SJYRHA0')">Rick</li>
+        </ul>
+
+        Videoid:<input type="text" ng-model="videos.yt.videoid">
+
+        <br /><br />
+
+        <button ng-if="videos.yt.playerStatus === 'NOT PLAYING' || videos.yt.playerStatus === 'PAUSED'"
+                ng-click="videos.sendControlEvent(videos.YT_event.PLAY)">Send Play</button>
+        <button ng-if="videos.yt.playerStatus === 'PLAYING'" ng-click="videos.sendControlEvent(videos.YT_event.PAUSE)">Send Pause</button>
+        <button ng-if="videos.yt.playerStatus === 'PLAYING'" ng-click="videos.sendControlEvent(videos.YT_event.STOP)">Send Stop</button>
+
+        <br />
+        <p>Player status is: {{videos.yt.playerStatus}}</p>
+    </div>
 
 </div>
