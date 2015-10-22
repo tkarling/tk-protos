@@ -1,18 +1,27 @@
 <!doctype html>
 <html ng-app="app" lang="en">
     <head>
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
         <meta charset="UTF-8">
-        <title>Angular App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-pink.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+        <link href="./images/logo.jpg" rel="icon" type="image/jpg"/>
+        <title>TK Protos</title>
         <base href="/">
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.0.0/annyang.min.js"></script>
     </head>
     <body>
-        <div class="container">
+        <div class="index">
 
             <nav>
-                <a href="/">Home</a>
-                <a href="/stylists">Stylists</a>
+                <!--<a href="/">Home</a>-->
+                <a href="/videos">Videos</a>
+                <a href="/pictures">Pictures</a>
+                <a href="/speech">Speech</a>
+                <a href="/reactive">Reactive</a>
+                <!--<a href="/stylists">Stylists</a>-->
             </nav>
 
             <ui-view></ui-view>
@@ -20,4 +29,6 @@
 
         </div>
     </body>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+
 </html>

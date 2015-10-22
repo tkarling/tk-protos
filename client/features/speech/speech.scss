@@ -1,0 +1,12 @@
+$primary-color: #3E4DB8;
+
+.speech {
+    h1 {
+        color: maroon;
+    }
+
+    .target-value {
+        color: $primary-color;
+        font-weight: bold;
+    }
+}

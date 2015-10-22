@@ -27,9 +27,9 @@ module.exports = {
             newPic.img = createPicImage(data, imgName, mimetype);
             lwip.open(tmp_path, imgType, function (oerr, image) {
                 if (oerr) return res.status(500).send(oerr);
-                image.contain(600, 600, function (err, croppedImage) {
+                image.contain(150, 150, function (err, croppedImage) {
                     if (err) console.log("image.scale error", err);
-                    image.crop(600, 600, function (err, croppedImage) {
+                    image.crop(100, 100, function (err, croppedImage) {
                         if (err) console.log("image.crop error", err);
                         croppedImage.toBuffer(imgType, function (err, buffer) {
                             if (err) console.log("toBuffer error", err);
@@ -116,9 +116,12 @@ module.exports = {
         var picIdQuery = req.query;
         var picId = req.query.picId;
 
+        console.log("delete pic", picId);
         Pic.findByIdAndRemove(picId, function (perr, result) {
+            console.log("Pic.findByIdAndRemove", perr, result);
             if (perr) return res.status(500).send(perr);
             PicData.findOneAndRemove(picIdQuery, function (derr, result) {
+                console.log("PicData.findByIdAndRemove", derr, result);
                 if (derr) return res.status(500).send(derr);
                 else res.send(result);
             });

@@ -1,0 +1,56 @@
+<div class="videos">
+    <h1>Video Demo</h1>
+    <!--{{videos.test}}-->
+
+    <h4>Video Tag<button ng-click="videos.showTagged = ! videos.showTagged;">Show Videos</button></button></h4>
+
+    <div ng-if="videos.showTagged">
+        <video width="400" controls>
+            <source src="../../videos/SampleVideo_720x480_1mb.mp4" type="video/mp4">
+            <!--<source src="mov_bbb.ogg" type="video/ogg">-->
+            Your browser does not support HTML5 video.
+        </video>
+
+        <video width="400" controls>
+            <source src="../../videos/SampleVideo_720x480_1mb.mp4" type="video/mp4">
+            <!--<source src="mov_bbb.ogg" type="video/ogg">-->
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+
+    <h4>YouTube</h4>
+
+    <div>
+        <div  ng-style="videos.myStyle">
+         <youtube width="{{videos.yt.width}}" height="{{videos.yt.height}}" videoid="{{videos.yt.videoid}}"></youtube>
+        </div>
+
+        <br />
+        Width:<input type="text" ng-model="videos.yt.width" ng-change="videos.updateWidth()">
+        Height:<input type="text" ng-model="videos.yt.height">
+
+        <button id="demo-menu-lower-left"
+                class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+        </button>
+
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+            for="demo-menu-lower-left">
+            <li class="mdl-menu__item" ng-click="videos.setVideoId('dNmu5NZG7sk')">Atte</li>
+            <li class="mdl-menu__item" ng-click="videos.setVideoId('oHg5SJYRHA0')">Rick</li>
+        </ul>
+
+        Videoid:<input type="text" ng-model="videos.yt.videoid">
+
+        <br /><br />
+
+        <button ng-if="videos.yt.playerStatus === 'NOT PLAYING' || videos.yt.playerStatus === 'PAUSED'"
+                ng-click="videos.sendControlEvent(videos.YT_event.PLAY)">Send Play</button>
+        <button ng-if="videos.yt.playerStatus === 'PLAYING'" ng-click="videos.sendControlEvent(videos.YT_event.PAUSE)">Send Pause</button>
+        <button ng-if="videos.yt.playerStatus === 'PLAYING'" ng-click="videos.sendControlEvent(videos.YT_event.STOP)">Send Stop</button>
+
+        <br />
+        <p>Player status is: {{videos.yt.playerStatus}}</p>
+    </div>
+
+</div>
