@@ -1,9 +1,6 @@
 
 node_modules/*
-
 .idea/*
-
-
 build/*
 
 client/videos/SampleVideo_720x480_1mb.mp4
