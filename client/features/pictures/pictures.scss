@@ -1,0 +1,38 @@
+$default-padding: 4px;
+
+.pictures {
+    h1 {
+        color: purple;
+    }
+
+    button {
+        margin: $default-padding;
+    }
+
+
+    .thumbnail-container {
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        width: 23%;
+        max-width: 100px;
+        margin-right: 1%;
+    }
+
+    .thumbnail-img {
+        padding: $default-padding;
+        width: 100%;
+    }
+
+    .small-delete-button {
+        position: absolute;
+        top: $default-padding;
+        left: $default-padding;
+        z-index: 5;
+    }
+
+    .full-img {
+        max-width: 100%;
+        max-height: 400px;
+    }
+}

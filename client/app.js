@@ -10,8 +10,9 @@ import home from './features/home';
 import stylists from './features/stylists';
 import speech from './features/speech';
 import videos from './features/videos';
+import pictures from './features/pictures';
 import reactive from './features/reactive';
 
-angular.module('app', [uirouter, rx, videos, speech, reactive])
+angular.module('app', [uirouter, rx, videos, pictures, speech, reactive])
     .value("uTest", false)
     .config(routes);

@@ -7,3 +7,5 @@ node_modules/*
 build/*
 
 client/videos/SampleVideo_720x480_1mb.mp4
+
+*.log

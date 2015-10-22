@@ -23,10 +23,16 @@ export default function routes($stateProvider, $urlRouterProvider, $locationProv
         //    }
         //})
         .state('videos', {
-            url: '/',
+            url: '/videos',
             template: require('./features/videos/videos.html'),
             controller: 'VideosController',
             controllerAs: 'videos'
+        })
+        .state('pictures', {
+            url: '/',
+            template: require('./features/pictures/pictures.html'),
+            controller: 'PicturesController',
+            controllerAs: 'pictures'
         })
         .state('speech', {
             url: '/speech',
