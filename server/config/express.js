@@ -62,6 +62,7 @@ module.exports = function () {
 
     // HERE WE INCLUDE THE ROUTES
     require('../routes/pic.server.routes.js')(app);
+    require('../routes/apic.server.routes.js')(app);
 
 
     // THIS WILL BE ANGULAR APP

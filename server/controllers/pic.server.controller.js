@@ -19,7 +19,7 @@ module.exports = {
         var imgType = getImageType(mimetype);
         var imgName = req.file.originalname;
         var thumbnailName = "tn_" + imgName;
-        //console.log("tmp_path", tmp_path, imgName, thumbnailName, mimetype, req.file);
+        console.log("imgType", imgType, "mimetype", mimetype);
 
         var newPic = new Pic;
         fs.readFile(tmp_path, function (err, data) {

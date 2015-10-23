@@ -10,11 +10,12 @@ function selectPic(currentPic, newPic) {
 }
 
 
-function pictureTools(mPicturesService) {
+function pictureTools() {
     return {
         restrict: 'E',
 
         scope: {
+            picsService: '=',
             deleteVisible: '=',
             currentPic: '='
         },
@@ -36,21 +37,25 @@ function pictureTools(mPicturesService) {
             '</div>',
 
         link: (scope, element, attrs) => {
+
             scope.addPicture = (pic) => {
-                selectPic(scope.currentPic, undefined);
-                return mPicturesService.addPic(pic)
-                    .then((response) => {
-                        selectPic(scope.currentPic, response.data);
-                        mPicturesService.getPicDatas();
-                    }, (error) => {
-                        if (error.status > 0) {
-                            console.log("addPic error: ", error);
-                            scope.currentPic.errorMsg = error.status + ': ' + error.statusText;
-                        }
-                    }, (evt) => {
-                        scope.currentPic.progress = Math.min(100, parseInt(100.0 *
-                            evt.loaded / evt.total));
-                    });
+                //console.log("pic", pic);
+                if(pic) {
+                    selectPic(scope.currentPic, undefined);
+                    return scope.picsService.addPic(pic)
+                        .then((response) => {
+                            selectPic(scope.currentPic, response.data);
+                            scope.picsService.getPicDatas();
+                        }, (error) => {
+                            if (error.status > 0) {
+                                console.log("addPic error: ", error);
+                                scope.currentPic.errorMsg = error.status + ': ' + error.statusText;
+                            }
+                        }, (evt) => {
+                            scope.currentPic.progress = Math.min(100, parseInt(100.0 *
+                                evt.loaded / evt.total));
+                        });
+                }
             }
 
 
@@ -58,11 +63,12 @@ function pictureTools(mPicturesService) {
     }
 }
 
-function fullPicture(mPicturesService) {
+function fullPicture() {
     return {
         restrict: 'E',
 
         scope: {
+            picsService: '=',
             currentPic: '='
         },
 
@@ -75,16 +81,17 @@ function fullPicture(mPicturesService) {
 
         link: (scope, element, attrs) => {
             scope.selectPic = selectPic;
-            scope.fullPicUrl = mPicturesService.fullPicUrl;
+            scope.fullPicUrl = scope.picsService.fullPicUrl;
         }
     }
 }
 
-function pictureGrid(mPicturesService) {
+function pictureGrid() {
     return {
         restrict: 'E',
 
         scope: {
+            picsService: '=',
             deleteVisible: '=',
             currentPic: '='
         },
@@ -95,6 +102,7 @@ function pictureGrid(mPicturesService) {
                     '<div ng-repeat="pic in picsContainer.pics"' +
                     'ng-click="selectPic(currentPic, pic)">' +
                     '<img class="thumbnail-img" ng-src="{{thumbnailUrl}}{{pic.picId}}"/>' +
+                    '<input ng-if="! pic.picId" class="thumbnail-img" ng-model="pic.name" />' +
                     '<button ng-if="deleteVisible"' +
                         'class="small-delete-button mdl-button mdl-js-button mdl-button--icon mdl-button--accent"' +
                         'ng-click="removePic(pic, $event)">' +
@@ -105,10 +113,10 @@ function pictureGrid(mPicturesService) {
 
         link: (scope, element, attrs) => {
             scope.selectPic = selectPic;
-            scope.thumbnailUrl = mPicturesService.thumbnailUrl;
+            scope.thumbnailUrl = scope.picsService.thumbnailUrl;
 
-            mPicturesService.getPicDatas().then((pics) => {
-                scope.picsContainer = mPicturesService.picsContainer;
+            scope.picsService.getPicDatas().then((pics) => {
+                scope.picsContainer = scope.picsService.picsContainer;
             });
 
 
@@ -120,8 +128,8 @@ function pictureGrid(mPicturesService) {
                 if(scope.currentPic.picId === pic.picId) {
                     selectPic(scope.currentPic, undefined);
                 }
-                return mPicturesService.removePic(pic).then((result) => {
-                    mPicturesService.getPicDatas();
+                return scope.picsService.removePic(pic).then((result) => {
+                    scope.picsService.getPicDatas();
                 });
             }
         }

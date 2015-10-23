@@ -1,23 +1,24 @@
 import ngFileUpload from 'ng-file-upload';
 
-class mPicturesService {
+class picturesService {
     constructor($http, Upload) {
+        this.$http = $http;
+        this.Upload = Upload;
+        this.picsContainer = {};
+    }
+
+    setUrls() {
         var url = "/api";
-        var picturesUri = "/pics";
         var idSelector = "?id=";
         var picIdSelector = "?picId=";
         var thumbnailUri = "/thumbnail?id=";
         var fullPicUri = "/fullPic?id=";
 
-        this.baseUrl = url + picturesUri;
+        this.baseUrl = url + this.picturesUri;
         this.baseUrlWId = this.baseUrl + idSelector;
         this.baseUrlWPicId = this.baseUrl + picIdSelector;
         this.thumbnailUrl = this.baseUrl + thumbnailUri;
         this.fullPicUrl = this.baseUrl + fullPicUri;
-        this.$http = $http;
-        this.Upload = Upload;
-
-        this.picsContainer = {};
     }
 
     getPicDatas() {
@@ -45,6 +46,18 @@ class mPicturesService {
         });
     }
 
+    savePic(pic) { // takes picData as input
+        return this.$http.put(this.baseUrlWId + pic._id, pic);
+    }
+}
+
+class mPicturesService extends picturesService {
+    constructor($http, Upload) {
+        super($http, Upload);
+        this.picturesUri = "/pics";
+        this.setUrls();
+    }
+
     removePic(pic) { // takes picData as input
         return this.$http.delete(this.baseUrlWPicId + pic.picId);
     }
@@ -53,11 +66,28 @@ class mPicturesService {
         return this.$http.delete(this.baseUrlWPicId + picId);
     }
 
-    savePic(pic) { // takes picData as input
-        return this.$http.put(this.baseUrlWId + pic._id, pic);
-    }
 }
 
-export default angular.module('services.mPicturesService', ["ngFileUpload"])
+class aPicturesService extends picturesService {
+    constructor($http, Upload) {
+        super($http, Upload);
+        this.picturesUri = "/apics";
+        this.setUrls();
+    }
+
+    removePic(pic) { // takes picData as input
+        return this.$http.delete(this.baseUrlWId + pic._id);
+    }
+
+    //removePicWithId(id) { // takes picData _id as input
+    //    return this.$http.delete(this.baseUrlWId + id);
+    //}
+
+
+}
+
+
+export default angular.module('services.picturesService', ["ngFileUpload"])
     .service('mPicturesService', mPicturesService)
+    .service('aPicturesService', aPicturesService)
     .name;

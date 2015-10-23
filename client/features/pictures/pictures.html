@@ -3,8 +3,14 @@
     <!--{{pictures.test}}-->
 
     <h4>Mongo Pictures</h4>
-    <picture-tools delete-visible="pictures.deleteVisible" current-pic="pictures.currentPic"></picture-tools>
-    <picture-grid delete-visible="pictures.deleteVisible" current-pic="pictures.currentPic"></picture-grid>
-    <full-picture current-pic="pictures.currentPic"></full-picture>
+    <picture-tools pics-service= "pictures.mPicturesService" delete-visible="pictures.deleteVisible" current-pic="pictures.currentPic"></picture-tools>
+    <picture-grid pics-service= "pictures.mPicturesService" delete-visible="pictures.deleteVisible" current-pic="pictures.currentPic"></picture-grid>
+    <full-picture pics-service= "pictures.mPicturesService" current-pic="pictures.currentPic"></full-picture>
+
+    <h4>Amazon Pictures</h4>
+    <picture-tools pics-service= "pictures.aPicturesService" delete-visible="pictures.aDeleteVisible" current-pic="pictures.currentAPic"></picture-tools>
+    <picture-grid pics-service= "pictures.aPicturesService" delete-visible="pictures.aDeleteVisible" current-pic="pictures.currentAPic"></picture-grid>
+    <full-picture pics-service= "pictures.aPicturesService" current-pic="pictures.currentAPic"></full-picture>
+
 
 </div>
