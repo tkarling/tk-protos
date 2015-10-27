@@ -5,6 +5,7 @@ function selectPic(currentPic, newPic) {
     currentPic._id = newPic ? newPic._id: undefined;
     currentPic.name = newPic ? newPic.name: undefined;
     currentPic.picId = newPic ? newPic.picId: undefined;
+    currentPic.fullPicUrl = newPic ? newPic.fullPicUrl : undefined;
     currentPic.progress = undefined;
     currentPic.errorMsg = undefined;
 }
@@ -77,6 +78,9 @@ function fullPicture() {
                 '<img ng-if="currentPic.picId" class="full-img"' +
                     'ng-src="{{fullPicUrl}}{{currentPic.picId}}"' +
                     'ng-click="selectPic(currentPic, undefined)"/>' +
+                '<img ng-if="currentPic.fullPicUrl" class="full-img"' +
+                    'ng-src="{{currentPic.fullPicUrl}}"' +
+                    'ng-click="selectPic(currentPic, undefined)"/>' +
             '</div>',
 
         link: (scope, element, attrs) => {
@@ -101,8 +105,10 @@ function pictureGrid() {
                 '<div class="thumbnail-container"' +
                     '<div ng-repeat="pic in picsContainer.pics"' +
                     'ng-click="selectPic(currentPic, pic)">' +
-                    '<img class="thumbnail-img" ng-src="{{thumbnailUrl}}{{pic.picId}}"/>' +
-                    '<input ng-if="! pic.picId" class="thumbnail-img" ng-model="pic.name" />' +
+                    '<img ng-if="pic.picId"class="thumbnail-img" ng-src="{{thumbnailUrl}}{{pic.picId}}"/>' +
+                    '<img ng-if="pic.thumbnailUrl"class="thumbnail-img" ng-src="{{pic.thumbnailUrl}}"/>' +
+                    '<img ng-if="! pic.picId && ! pic.thumbnailUrl" class="thumbnail-img" ' +
+                        'ng-src=""/>' +
                     '<button ng-if="deleteVisible"' +
                         'class="small-delete-button mdl-button mdl-js-button mdl-button--icon mdl-button--accent"' +
                         'ng-click="removePic(pic, $event)">' +

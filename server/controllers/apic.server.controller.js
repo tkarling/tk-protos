@@ -3,6 +3,12 @@ var lwip = require('lwip');
 //var Pic = require('../models/pic.server.model');
 var APicData = require('../models/apicData.server.model');
 
+// AWS definitions begin
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
+var myBucketName = 'tkprotobucket';
+// AWS definitions end
+
 var getImageType = function (contentType) {
     return contentType.substring(6, contentType.length);
 }
@@ -21,35 +27,47 @@ module.exports = {
         var thumbnailName = "tn_" + imgName;
         //console.log("tmp_path", tmp_path, imgName, thumbnailName, contentType, req.file);
 
-        var newPic = {};
         fs.readFile(tmp_path, function (err, data) {
             if (err) return res.status(500).send(err);
-            newPic.img = createPicImage(data, imgName, contentType);
-            lwip.open(tmp_path, imgType, function (oerr, image) {
-                if (oerr) return res.status(500).send(oerr);
-                image.contain(150, 150, function (err, croppedImage) {
-                    if (err) console.log("image.scale error", err);
-                    image.crop(100, 100, function (err, croppedImage) {
-                        if (err) console.log("image.crop error", err);
-                        croppedImage.toBuffer(imgType, function (err, buffer) {
-                            if (err) console.log("toBuffer error", err);
-                            newPic.thumbnail = createPicImage(buffer, thumbnailName, contentType);
-                            //newPic.save(function (perr, picsResult) {
-                                fs.unlink(tmp_path, function (uerr) {
-                                    if (uerr) console.log("error deleting tmp file", uerr);
-                                });
-                                //if (perr) return res.status(500).send(perr);
+            var params = {
+                Bucket: myBucketName
+                , Key: imgName
+                , Body: data
+                , ContentType: contentType
+                , ACL: 'public-read'
+            };
+            s3.upload(params, function (serr, s3ImgData) {
+                //console.log("s3.upload", serr, s3ImgData);
+                if (err) return res.status(500).send(err);
+                lwip.open(tmp_path, imgType, function (oerr, image) {
+                    if (oerr) return res.status(500).send(oerr);
+                    image.contain(150, 150, function (err, croppedImage) {
+                        if (err) console.log("image.scale error", err);
+                        image.crop(100, 100, function (err, croppedImage) {
+                            if (err) console.log("image.crop error", err);
+                            croppedImage.toBuffer(imgType, function (err, buffer) {
+                                if (err) console.log("toBuffer error", err);
+                                params.Key = imgName + "thumb";
+                                params.Body = buffer;
+                                s3.upload(params, function (serr, s3ThumbData) {
+                                    if (err) return res.status(500).send(err);
+                                    fs.unlink(tmp_path, function (uerr) {
+                                        if (uerr) console.log("error deleting tmp file", uerr);
+                                    });
 
-                                var newAPicData = new APicData;
-                                newAPicData.bucketName = 'TKProtoBucket';
-                                newAPicData.name = imgName;
-                                newAPicData.contentType = contentType;
-                                //newAPicData.picId = picsResult._id;
-                                newAPicData.save(function (derr, dataResult) {
-                                    if (derr) return res.status(500).send(derr);
-                                    else res.send(dataResult);
+                                    var newAPicData = new APicData;
+                                    newAPicData.bucketName = myBucketName;
+                                    newAPicData.name = imgName;
+                                    newAPicData.contentType = contentType;
+                                    newAPicData.fullPicUrl = s3ImgData.Location;
+                                    newAPicData.thumbnailUrl = s3ThumbData.Location;
+                                    //newAPicData.picId = picsResult._id;
+                                    newAPicData.save(function (derr, dataResult) {
+                                        if (derr) return res.status(500).send(derr);
+                                        else res.send(dataResult);
+                                    });
                                 });
-                            //});
+                            });
                         });
                     });
                 });
@@ -58,9 +76,9 @@ module.exports = {
     },
 
     // reads based on all/ APicData Id
-    read: function(req, res) {
+    read: function (req, res) {
         APicData.find(req.query)
-            .exec(function(err, result) {
+            .exec(function (err, result) {
                 if (err) return res.status(500).send(err);
                 else res.send(result);
             });
@@ -120,12 +138,12 @@ module.exports = {
 
         console.log("delete pic", id);
         //Pic.findByIdAndRemove(picId, function (perr, result) {
-            //if (perr) return res.status(500).send(perr);
-            APicData.findByIdAndRemove(id, function (derr, result) {
-                console.log("APicData.findByIdAndRemove", derr, result);
-                if (derr) return res.status(500).send(derr);
-                else res.send(result);
-            });
+        //if (perr) return res.status(500).send(perr);
+        APicData.findByIdAndRemove(id, function (derr, result) {
+            console.log("APicData.findByIdAndRemove", derr, result);
+            if (derr) return res.status(500).send(derr);
+            else res.send(result);
+        });
         //});
 
     }

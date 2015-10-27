@@ -11,14 +11,10 @@ class picturesService {
         var url = "/api";
         var idSelector = "?id=";
         var picIdSelector = "?picId=";
-        var thumbnailUri = "/thumbnail?id=";
-        var fullPicUri = "/fullPic?id=";
 
         this.baseUrl = url + this.picturesUri;
         this.baseUrlWId = this.baseUrl + idSelector;
         this.baseUrlWPicId = this.baseUrl + picIdSelector;
-        this.thumbnailUrl = this.baseUrl + thumbnailUri;
-        this.fullPicUrl = this.baseUrl + fullPicUri;
     }
 
     getPicDatas() {
@@ -54,8 +50,12 @@ class picturesService {
 class mPicturesService extends picturesService {
     constructor($http, Upload) {
         super($http, Upload);
+        var thumbnailUri = "/thumbnail?id=";
+        var fullPicUri = "/fullPic?id=";
         this.picturesUri = "/pics";
         this.setUrls();
+        this.thumbnailUrl = this.baseUrl + thumbnailUri;
+        this.fullPicUrl = this.baseUrl + fullPicUri;
     }
 
     removePic(pic) { // takes picData as input
