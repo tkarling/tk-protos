@@ -10,7 +10,10 @@ describe('Controller: Pictures', function() {
     }));
 
     it('test is initialized to Hello from PicturesController', function() {
-        let ctrl = $controller('PicturesController');
+        let ctrl = $controller('PicturesController', {
+            mPicturesService: "",
+            aPicturesService: ""
+        });
         expect(ctrl.test).toBe('Hello from PicturesController');
     });
 });

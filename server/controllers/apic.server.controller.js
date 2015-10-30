@@ -7,17 +7,13 @@ var APicData = require('../models/apicData.server.model');
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3();
 var myBucketName = 'tkprotobucket';
+var THUMBIMGID = 'thumb';
 // AWS definitions end
 
-var THUMBIMGID = 'thumb';
 
 var getImageType = function (contentType) {
     return contentType.substring(6, contentType.length);
 }
-
-var createPicImage = function (image, name, contentType) {
-    return {data: image, name: name, contentType: contentType}
-};
 
 module.exports = {
 
