@@ -9,6 +9,8 @@ var s3 = new AWS.S3();
 var myBucketName = 'tkprotobucket';
 // AWS definitions end
 
+var THUMBIMGID = 'thumb';
+
 var getImageType = function (contentType) {
     return contentType.substring(6, contentType.length);
 }
@@ -47,7 +49,7 @@ module.exports = {
                             if (err) console.log("image.crop error", err);
                             croppedImage.toBuffer(imgType, function (err, buffer) {
                                 if (err) console.log("toBuffer error", err);
-                                params.Key = imgName + "thumb";
+                                params.Key = imgName + THUMBIMGID;
                                 params.Body = buffer;
                                 s3.upload(params, function (serr, s3ThumbData) {
                                     if (err) return res.status(500).send(err);
@@ -84,39 +86,9 @@ module.exports = {
             });
     },
 
-    //// reads based on picId
-    //readFullPic: function (req, res, next) {
-    //    Pic.findById(req.query.id, function (err, doc) {
-    //        if (err) return next(err);
-    //        if(doc && doc.img) {
-    //            res.contentType(doc.img.contentType);
-    //            res.send(doc.img.data);
-    //        } else {
-    //            console.log("readFullPic: NO FULLPIC", req.query.id, doc);
-    //            return next(err);
-    //        }
-    //    });
-    //},
-    //
-    //// reads based on picId
-    //readThumbnail: function (req, res, next) {
-    //    Pic.findById(req.query.id, function (err, doc) {
-    //        //console.log("readThumbnail", doc);
-    //        if (err) return next(err);
-    //        if(doc && doc.thumbnail) {
-    //            res.contentType(doc.thumbnail.contentType);
-    //            res.send(doc.thumbnail.data);
-    //        } else {
-    //            console.log("readThumbnail: NO THUMBNAIL", req.query.id, doc);
-    //            return next(err);
-    //        }
-    //
-    //    });
-    //},
-
-    // updates based on APicData ID, NOT TESTETD
+    // updates based on APicData ID, NOT TESTED
     update: function (req, res) {
-        console.log("update", req.query.id, req.body);
+        //console.log("update", req.query.id, req.body);
         var id = req.query.id;
         var updatedObject = req.body;
         APicData.findByIdAndUpdate(id, updatedObject, {
@@ -124,27 +96,37 @@ module.exports = {
         }, function (err, result) {
             if (err) return res.status(500).send(err);
             else {
-                console.log("update result", result);
+                //console.log("update result", result);
                 res.send(result);
             }
         });
     },
 
-    // deletes based on picId === CHANGE TO APicData ID
+    // deletes based on picName
     delete: function (req, res) {
-        console.log("delete query", req.query)
-        //var picIdQuery = req.query;
-        var id = req.query.id;
+        //console.log("delete query", req.query)
+        var picNameQuery = req.query;
+        var picName = req.query.name;
 
-        console.log("delete pic", id);
-        //Pic.findByIdAndRemove(picId, function (perr, result) {
-        //if (perr) return res.status(500).send(perr);
-        APicData.findByIdAndRemove(id, function (derr, result) {
-            console.log("APicData.findByIdAndRemove", derr, result);
-            if (derr) return res.status(500).send(derr);
-            else res.send(result);
+        var params = {
+            Bucket: myBucketName
+            , Key: picName
+        };
+
+        //console.log("delete pic", myBucketName, picName);
+        s3.deleteObject(params, function (err, s3ImgData) {
+            console.log("s3.deleteObject", err, s3ImgData);
+            if (err) return res.status(500).send(err);
+            params.Key += THUMBIMGID;
+            s3.deleteObject(params, function (terr, s3ThumbImgData) {
+                if (terr) return res.status(500).send(terr);
+                APicData.findOneAndRemove(picNameQuery, function (derr, result) {
+                    console.log("APicData.findOneAndRemove", derr, result);
+                    if (derr) return res.status(500).send(derr);
+                    else res.send(result);
+                });
+            });
         });
-        //});
 
     }
 };

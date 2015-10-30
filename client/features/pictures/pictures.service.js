@@ -11,10 +11,12 @@ class picturesService {
         var url = "/api";
         var idSelector = "?id=";
         var picIdSelector = "?picId=";
+        var nameSelector = "?name=";
 
         this.baseUrl = url + this.picturesUri;
         this.baseUrlWId = this.baseUrl + idSelector;
         this.baseUrlWPicId = this.baseUrl + picIdSelector;
+        this.baseUrlWName = this.baseUrl + nameSelector;
     }
 
     getPicDatas() {
@@ -76,7 +78,7 @@ class aPicturesService extends picturesService {
     }
 
     removePic(pic) { // takes picData as input
-        return this.$http.delete(this.baseUrlWId + pic._id);
+        return this.$http.delete(this.baseUrlWName + pic.name);
     }
 
     //removePicWithId(id) { // takes picData _id as input
