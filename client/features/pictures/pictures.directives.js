@@ -75,17 +75,16 @@ function fullPicture() {
 
         template:
             '<div>' +
-                '<img ng-if="currentPic.picId" class="full-img"' +
-                    'ng-src="{{fullPicUrl}}{{currentPic.picId}}"' +
+                '<img ng-if="currentPic.picId" class="full-img"' + 'ng-src="{{fullPicUrl}}{{currentPic.picId}}"' +
                     'ng-click="selectPic(currentPic, undefined)"/>' +
-                '<img ng-if="currentPic.fullPicUrl" class="full-img"' +
-                    'ng-src="{{currentPic.fullPicUrl}}"' +
-                    'ng-click="selectPic(currentPic, undefined)"/>' +
+                '<img ng-if="! currentPic.picId" class="full-img"' + 'ng-src="{{imgUrl}}{{currentPic._id}}"' +
+                'ng-click="selectPic(currentPic, undefined)"/>' +
             '</div>',
 
         link: (scope, element, attrs) => {
             scope.selectPic = selectPic;
             scope.fullPicUrl = scope.picsService.fullPicUrl;
+            scope.imgUrl = scope.picsService.imgUrl;
         }
     }
 }
@@ -105,10 +104,10 @@ function pictureGrid() {
                 '<div class="thumbnail-container"' +
                     '<div ng-repeat="pic in picsContainer.pics"' +
                     'ng-click="selectPic(currentPic, pic)">' +
+
                     '<img ng-if="pic.picId"class="thumbnail-img" ng-src="{{thumbnailUrl}}{{pic.picId}}"/>' +
-                    '<img ng-if="pic.thumbnailUrl"class="thumbnail-img" ng-src="{{pic.thumbnailUrl}}"/>' +
-                    '<img ng-if="! pic.picId && ! pic.thumbnailUrl" class="thumbnail-img" ' +
-                        'ng-src=""/>' +
+                    '<img ng-if="! pic.picId"class="thumbnail-img" ng-src="{{imgUrl}}{{pic._id}}{{thumbImgId}}"/>' +
+
                     '<button ng-if="deleteVisible"' +
                         'class="small-delete-button mdl-button mdl-js-button mdl-button--icon mdl-button--accent"' +
                         'ng-click="removePic(pic, $event)">' +
@@ -120,6 +119,8 @@ function pictureGrid() {
         link: (scope, element, attrs) => {
             scope.selectPic = selectPic;
             scope.thumbnailUrl = scope.picsService.thumbnailUrl;
+            scope.imgUrl = scope.picsService.imgUrl;
+            scope.thumbImgId = scope.picsService.thumbImgId;
 
             scope.picsService.getPicDatas().then((pics) => {
                 scope.picsContainer = scope.picsService.picsContainer;

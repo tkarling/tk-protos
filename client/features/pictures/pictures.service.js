@@ -73,18 +73,15 @@ class mPicturesService extends picturesService {
 class aPicturesService extends picturesService {
     constructor($http, Upload) {
         super($http, Upload);
+        this.imgUrl = "https://s3-us-west-2.amazonaws.com/tkprotobucket/"
         this.picturesUri = "/apics";
+        this.thumbImgId = "thumb";
         this.setUrls();
     }
 
     removePic(pic) { // takes picData as input
         return this.$http.delete(this.baseUrlWName + pic.name);
     }
-
-    //removePicWithId(id) { // takes picData _id as input
-    //    return this.$http.delete(this.baseUrlWId + id);
-    //}
-
 
 }
 

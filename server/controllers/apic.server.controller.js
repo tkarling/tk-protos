@@ -26,47 +26,44 @@ module.exports = {
         var contentType = req.file.mimetype;
         var imgType = getImageType(contentType);
         var imgName = req.file.originalname;
-        var thumbnailName = "tn_" + imgName;
-        //console.log("tmp_path", tmp_path, imgName, thumbnailName, contentType, req.file);
+        //console.log("tmp_path", tmp_path, imgName, contentType, req.file);
 
-        fs.readFile(tmp_path, function (err, data) {
-            if (err) return res.status(500).send(err);
-            var params = {
-                Bucket: myBucketName
-                , Key: imgName
-                , Body: data
-                , ContentType: contentType
-                , ACL: 'public-read'
-            };
-            s3.upload(params, function (serr, s3ImgData) {
-                //console.log("s3.upload", serr, s3ImgData);
-                if (err) return res.status(500).send(err);
-                lwip.open(tmp_path, imgType, function (oerr, image) {
-                    if (oerr) return res.status(500).send(oerr);
-                    image.contain(150, 150, function (err, croppedImage) {
-                        if (err) console.log("image.scale error", err);
-                        image.crop(100, 100, function (err, croppedImage) {
-                            if (err) console.log("image.crop error", err);
-                            croppedImage.toBuffer(imgType, function (err, buffer) {
-                                if (err) console.log("toBuffer error", err);
-                                params.Key = imgName + THUMBIMGID;
-                                params.Body = buffer;
-                                s3.upload(params, function (serr, s3ThumbData) {
-                                    if (err) return res.status(500).send(err);
-                                    fs.unlink(tmp_path, function (uerr) {
-                                        if (uerr) console.log("error deleting tmp file", uerr);
-                                    });
-
-                                    var newAPicData = new APicData;
-                                    newAPicData.bucketName = myBucketName;
-                                    newAPicData.name = imgName;
-                                    newAPicData.contentType = contentType;
-                                    newAPicData.fullPicUrl = s3ImgData.Location;
-                                    newAPicData.thumbnailUrl = s3ThumbData.Location;
-                                    //newAPicData.picId = picsResult._id;
-                                    newAPicData.save(function (derr, dataResult) {
-                                        if (derr) return res.status(500).send(derr);
-                                        else res.send(dataResult);
+        var newAPicData = new APicData;
+        newAPicData.bucketName = myBucketName;
+        newAPicData.name = imgName;
+        newAPicData.contentType = contentType;
+        newAPicData.save(function (derr, dataResult) {
+            //console.log("after save", dataResult);
+            if (derr) return res.status(500).send("save err" + derr);
+            fs.readFile(tmp_path, function (err, data) {
+                if (err) return res.status(500).send("readFile err" +err);
+                var params = {
+                    Bucket: myBucketName
+                    , Key: dataResult._id + ""
+                    , Body: data
+                    , ContentType: contentType
+                    , ACL: 'public-read'
+                };
+                s3.upload(params, function (serr, s3ImgData) {
+                    //console.log("img s3.upload", serr, s3ImgData);
+                    if (serr) return res.status(500).send("img upload err" + serr);
+                    lwip.open(tmp_path, imgType, function (oerr, image) {
+                        if (oerr) return res.status(500).send("lw open err" + oerr);
+                        image.contain(150, 150, function (err, croppedImage) {
+                            if (err) console.log("image.scale error", err);
+                            image.crop(100, 100, function (err, croppedImage) {
+                                if (err) console.log("image.crop error", err);
+                                croppedImage.toBuffer(imgType, function (err, buffer) {
+                                    if (err) console.log("toBuffer error", err);
+                                    params.Key += THUMBIMGID;
+                                    params.Body = buffer;
+                                    s3.upload(params, function (serr, s3ThumbData) {
+                                        //console.log("thumb s3.upload", serr, s3ThumbData);
+                                        if (serr) return res.status(500).send("thumb upload err" + serr);
+                                        fs.unlink(tmp_path, function (uerr) {
+                                            if (uerr) console.log("error deleting tmp file", uerr);
+                                        });
+                                        res.send(dataResult);
                                     });
                                 });
                             });
@@ -76,6 +73,7 @@ module.exports = {
             });
         });
     },
+
 
     // reads based on all/ APicData Id
     read: function (req, res) {
@@ -115,13 +113,13 @@ module.exports = {
 
         //console.log("delete pic", myBucketName, picName);
         s3.deleteObject(params, function (err, s3ImgData) {
-            console.log("s3.deleteObject", err, s3ImgData);
+            //console.log("s3.deleteObject", err, s3ImgData);
             if (err) return res.status(500).send(err);
             params.Key += THUMBIMGID;
             s3.deleteObject(params, function (terr, s3ThumbImgData) {
                 if (terr) return res.status(500).send(terr);
                 APicData.findOneAndRemove(picNameQuery, function (derr, result) {
-                    console.log("APicData.findOneAndRemove", derr, result);
+                    //console.log("APicData.findOneAndRemove", derr, result);
                     if (derr) return res.status(500).send(derr);
                     else res.send(result);
                 });
