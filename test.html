@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <style>
+        #electriccars::before {
+            content: attr(data-parent);
+            position:absolute;
+            top:30px;
+            left:30px;
+        }
+    </style>
+    <article
+            id="electriccars"
+            data-columns="3"
+            data-index-number="12314"
+            data-parent="cars">
+        <img src="./client/images/logo.jpg"/>
+    </article>
+</body>
+</html>

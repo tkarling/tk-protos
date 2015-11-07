@@ -10,17 +10,6 @@ var schema = new mongoose.Schema ({
     contentType: {
         type: String
     },
-    fullPicUrl: {
-        type: String
-    },
-    thumbnailUrl: {
-        type: String
-    }
-    //picId: {
-    //    type: mongoose.Schema.Types.ObjectId,
-    //    ref: "Pic",
-    //    required: true
-    //}
 });
 
 module.exports = mongoose.model('APicData', schema);
